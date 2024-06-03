@@ -8,13 +8,7 @@ pipeline {
 	    maven "MAVEN3"
 	    jdk "OracleJDK8"
 	}
-
-    stages{
-        stage('Print error'){
-            steps{
-                sh 'fake comment'
-            }
-        }
+          }
         stage('Fetch code') {
           steps{
               git branch: 'vp-rem', url:'https://github.com/devopshydclub/vprofile-repo.git'
@@ -51,8 +45,8 @@ pipeline {
             }
             steps {
                withSonarQubeEnv('sonar') {
-                   sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=vprofile \
-                   -Dsonar.projectName=vprofile \
+                   sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=new-cicd \
+                   -Dsonar.projectName=new-cicd \
                    -Dsonar.projectVersion=1.0 \
                    -Dsonar.sources=src/ \
                    -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
@@ -78,7 +72,7 @@ pipeline {
                 nexusArtifactUploader(
                   nexusVersion: 'nexus3',
                   protocol: 'http',
-                  nexusUrl: '172.31.18.28:8081',
+                  nexusUrl: '172.16.18.116:8081',
                   groupId: 'QA',
                   version: "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}",
                   repository: 'vprofile-repo',
